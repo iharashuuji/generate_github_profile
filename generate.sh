@@ -50,12 +50,19 @@ PUBLIC_REPOS="${PUBLIC_REPOS:-N/A}"
 
 # --- 2. テンプレートを置換して出力する ------------------------------
 
-# sed の s/置換前/置換後/g で文字列を置き換える。
+# sed の s<区切り文字>置換前<区切り文字>置換後<区切り文字>g で文字列を置き換える。
+#
+# 【区切り文字に / ではなく | を使っている理由】
+#   置換したい値そのものに "/" が含まれていると（例：BUILD_HOST の "Linux / codespaces-xxx"）、
+#   sed が "s/..." の区切りと勘違いして
+#     sed: -e expression #4, char 26: unknown option to `s'
+#   というエラーで落ちます。
+#   値に出てきにくい "|" を区切り文字にすることで、この問題を回避しています。
 sed \
-  -e "s/{{USER_NAME}}/${USER_NAME}/g" \
-  -e "s/{{BUILD_DATE}}/${BUILD_DATE}/g" \
-  -e "s/{{PUBLIC_REPOS}}/${PUBLIC_REPOS}/g" \
-  -e "s/{{BUILD_HOST}}/${BUILD_HOST}/g" \
+  -e "s|{{USER_NAME}}|${USER_NAME}|g" \
+  -e "s|{{BUILD_DATE}}|${BUILD_DATE}|g" \
+  -e "s|{{PUBLIC_REPOS}}|${PUBLIC_REPOS}|g" \
+  -e "s|{{BUILD_HOST}}|${BUILD_HOST}|g" \
   "${TEMPLATE}" > "${OUTPUT}"
 
 echo "✅ ${OUTPUT} を生成しました（USER_NAME=${USER_NAME}, PUBLIC_REPOS=${PUBLIC_REPOS}）"
