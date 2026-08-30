@@ -13,6 +13,14 @@ on:
     branches: [main]      # main に push されたとき
   workflow_dispatch:      # GitHub の画面から手動で実行したいとき
 
+# ワークフローに与える権限。
+# これが無いと、GITHUB_TOKEN が読み取り専用になり、最後の git push が
+#   remote: Permission to <user>/<repo>.git denied to github-actions[bot].
+#   fatal: unable to access ... : The requested URL returned error: 403
+# で失敗する。README.md をコミットし直すために contents: write が必要。
+permissions:
+  contents: write
+
 jobs:
   update:
     runs-on: ubuntu-latest    # GitHub が用意する Ubuntu マシンを借りて実行する
