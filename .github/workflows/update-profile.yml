@@ -1,0 +1,34 @@
+# ============================================================
+#  Update Profile ワークフロー
+#
+#  ※ これは第二回の「配布済み」ファイルです。
+#     第三回で、このファイルの「プロフィールを再生成」ステップだけを
+#     受講者自身が Docker 版に差し替えます。
+# ============================================================
+name: Update Profile
+
+# いつ動かすか
+on:
+  push:
+    branches: [main]      # main に push されたとき
+  workflow_dispatch:      # GitHub の画面から手動で実行したいとき
+
+jobs:
+  update:
+    runs-on: ubuntu-latest    # GitHub が用意する Ubuntu マシンを借りて実行する
+    steps:
+      # リポジトリのコードを、実行マシン上に取ってくる
+      - uses: actions/checkout@v5
+
+      # ★★★ 第三回では、この1ステップだけを Docker 版に差し替えます ★★★
+      - name: プロフィールを再生成
+        run: ./generate.sh
+
+      # 生成された README.md をコミットして push し直す
+      - name: 変更をコミット
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "chore: update profile" || echo "no changes"
+          git push
