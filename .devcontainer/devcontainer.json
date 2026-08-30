@@ -1,6 +1,15 @@
 {
   "name": "GitHub Profile 自動化ハンズオン",
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu-24.04",
+
+  // 第三回の Docker 演習で、Codespace 内から docker コマンドを使うために必要。
+  // これが無いと DAY3 の `docker build` が "command not found" で失敗する。
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "moby": true
+    }
+  },
   "customizations": {
     "vscode": {
       "extensions": [
