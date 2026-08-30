@@ -1,0 +1,15 @@
+# OS / エディタ
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/*
+!.vscode/extensions.json
+
+# 生成物・一時ファイル
+*.tmp
+*.bak
+README.md.bak
+
+# 環境変数（トークン等は絶対にコミットしない）
+.env
+.env.local
